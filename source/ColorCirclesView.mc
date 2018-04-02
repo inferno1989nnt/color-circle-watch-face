@@ -57,7 +57,7 @@ using Toybox.Activity as Act;
 using Toybox.ActivityMonitor as Monitor;
 using Toybox.Background;
 
-class RunHappyCirclesView extends Ui.WatchFace {
+class ColorCirclesView extends Ui.WatchFace {
 	//user selected data fields to display
 	var PROP_FIELDS = new [5];
 	var fieldProperties = ["Field1", "Field2", "Field3", "Field4", "Phone"];
