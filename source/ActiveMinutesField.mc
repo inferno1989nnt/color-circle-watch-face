@@ -12,13 +12,7 @@
 */
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class ActiveMinutesField extends Ui.Drawable {
 
@@ -27,18 +21,20 @@ class ActiveMinutesField extends Ui.Drawable {
 	
 	var actMinX;
 	var actMinY;
+	var actMinRad;
 	var actMinColor;
 	var actMinFont;
 	var actMinDayOrWeek;
 	var actMinAsPercent;
 	
-	function initialize(pactMinX, pactMinY, pactMinFont, pactMinColor, pactMinDayOrWeek, pactMinAsPercent) {
+	function initialize(pactMinX, pactMinY, pactMinRad, pactMinFont, pactMinColor, pactMinDayOrWeek, pactMinAsPercent) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		actMin = 0;
 		actMinGoal = 0;
 
 		actMinX = pactMinX;
 		actMinY = pactMinY;
+		actMinRad = pactMinRad;
 		actMinColor = pactMinColor;
 		actMinFont = pactMinFont;
 		actMinDayOrWeek = pactMinDayOrWeek;
@@ -46,7 +42,6 @@ class ActiveMinutesField extends Ui.Drawable {
 	}
 	
 	function draw(dc) {
-		dc.setColor(actMinColor, Gfx.COLOR_TRANSPARENT);
 		switch (actMinDayOrWeek) {
 			case 1:
 				actMin = ActMon.getInfo().activeMinutesWeek.total.toDouble();
@@ -58,13 +53,14 @@ class ActiveMinutesField extends Ui.Drawable {
 				actMinGoal = (ActMon.getInfo().activeMinutesWeekGoal.toDouble())/7.0;
 				break;
 		}
+		
 		switch (actMinAsPercent) {
 			case 1:
-				dc.drawText(actMinX, actMinY, actMinFont, ((actMin/actMinGoal)*100).toNumber().toString() + "%", Gfx.TEXT_JUSTIFY_CENTER);
+				Helper.drawColorCircle(dc, actMinX, actMinY, actMinRad, Ui.loadResource(Rez.Drawables.MinutesIcon), ((actMin/actMinGoal)*100).toNumber().toString() + "%", actMinFont, actMinColor);
 				break;
 			case 0:
 			default:
-				dc.drawText(actMinX, actMinY, actMinFont, actMin.toNumber().toString(), Gfx.TEXT_JUSTIFY_CENTER);
+				Helper.drawColorCircle(dc, actMinX, actMinY, actMinRad, Ui.loadResource(Rez.Drawables.MinutesIcon), actMin.toNumber().toString(), actMinFont, actMinColor);
 				break;
 		}		
 	}

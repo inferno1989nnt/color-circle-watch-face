@@ -6,34 +6,29 @@
 */
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class AlarmField extends Ui.Drawable {
 
 	var alm;
 	var almX;
 	var almY;
+	var almRad;
 	var almColor;
 	var almFont;
 	
-	function initialize(palmX, palmY, palmFont, palmColor) {
+	function initialize(palmX, palmY, palmRad, palmFont, palmColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		alm = 0;
 		almX = palmX;
 		almY = palmY;
+		almRad = palmRad;
 		almColor = palmColor;
 		almFont = palmFont;
 	}
 	
 	function draw(dc) {
 		alm = System.getDeviceSettings().alarmCount;
-		dc.setColor(almColor, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(almX, almY, almFont, alm.toString(), Gfx.TEXT_JUSTIFY_CENTER);
+		Helper.drawColorCircle(dc, almX, almY, almRad, Ui.loadResource(Rez.Drawables.AlarmIcon), alm.toString(), almFont, almColor);
 	}
 }

@@ -7,49 +7,42 @@
 
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class DistanceField extends Ui.Drawable {
 
 	var dist;
 	var distX;
 	var distY;
+	var distRad;
 	var distColor;
 	var distFont;
-	var distString;
-	var distLabel;
 
-	function initialize(pdistX, pdistY, pdistFont, pdistColor) {
+	function initialize(pdistX, pdistY, pdistRad, pdistFont, pdistColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		dist = 0;
 		distX = pdistX;
 		distY = pdistY;
+		distRad = pdistRad;
 		distColor = pdistColor;
 		distFont = pdistFont;
-		distString = "";
-		distLabel = "m";
 	}
 	
 	function draw(dc) {
+		var strDist = "";
 		dist = ActMon.getInfo().distance;
 		if(dist != null) {
 			if (System.getDeviceSettings().distanceUnits == 0) {
-				distLabel = "k";
 				dist = dist.toFloat()/100000.0;
+				strDist = dist.format("%.1f").toString() + "k";
 			} else {
-				distLabel = "m";
 				dist = dist.toFloat()*.000006213712;
+				strDist = dist.format("%.1f").toString() + "m";
 			}
-			dc.drawText(distX, distY, distFont, dist.format("%.2f").toString() + distLabel, Gfx.TEXT_JUSTIFY_CENTER);
 		} else {
-			dc.drawText(distX, distY, distFont, "--", Gfx.TEXT_JUSTIFY_CENTER);
+			strDist = "--";
 		}
+		Helper.drawColorCircle(dc, distX, distY, distRad, Ui.loadResource(Rez.Drawables.DistanceIcon), strDist, distFont, distColor);
 	}
 }
 			

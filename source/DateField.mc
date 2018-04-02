@@ -14,13 +14,9 @@ Options  in parameter list include:
 
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
+using Toybox.Time.Gregorian as Calendar;
+using Toybox.Graphics as Gfx;
 
 class DateField extends Ui.Drawable {
 

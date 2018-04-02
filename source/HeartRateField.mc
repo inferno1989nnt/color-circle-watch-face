@@ -7,10 +7,7 @@
 */
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.System as Sys;
-using Toybox.Application as App;
 
 class HeartRateField extends Ui.Drawable {
 
@@ -18,30 +15,28 @@ class HeartRateField extends Ui.Drawable {
 	var heartRateColor = null;
 	var heartRateX = 0;
 	var heartRateY = 0;
-	
+	var heartRateRad = 0;
 
-	function initialize(pheartRateX, pheartRateY, pheartRateFont, pheartRateColor) {
+	function initialize(pheartRateX, pheartRateY, pheartRateRad, pheartRateFont, pheartRateColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		heartRateFont = pheartRateFont;
 		heartRateColor = pheartRateColor;
 		heartRateX = pheartRateX;
 		heartRateY = pheartRateY;
+		heartRateRad = pheartRateRad;
 	}
 	
 	function draw(dc) {
 		var heartRate = "";
-		var HRHistory;
 
 		if (ActMon has :getHeartRateHistory) {
-			HRHistory = ActMon.getHeartRateHistory(1, true);
+			var HRHistory = ActMon.getHeartRateHistory(1, true);
 			if ((HRHistory != null) && (HRHistory.getMax() != null) && (HRHistory.getMax() > 0) && (HRHistory.getMax() < 255)) {
-				heartRate = HRHistory.getMax();
+				heartRate = HRHistory.getMax() + "";
 			}
 		} else {
-			heartRate = Activity.getActivityInfo().currentHeartRate + "bpm";
+			heartRate = Activity.getActivityInfo().currentHeartRate + "";
 		}
-		
-		dc.setColor(heartRateColor, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(heartRateX, heartRateY, heartRateFont, heartRate, Gfx.TEXT_JUSTIFY_CENTER);
+		Helper.drawColorCircle(dc, heartRateX, heartRateY, heartRateRad, Ui.loadResource(Rez.Drawables.HeartRateIcon), heartRate, heartRateFont, heartRateColor);
 	}
 }

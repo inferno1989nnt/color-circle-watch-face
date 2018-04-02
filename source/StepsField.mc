@@ -7,13 +7,7 @@
 */
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class StepsField extends Ui.Drawable {
 
@@ -23,33 +17,33 @@ class StepsField extends Ui.Drawable {
 	var stepColor = null;
 	var stepX = null;
 	var stepY = null;
+	var stepRad = null;
 
-
-	function initialize(pstepX, pstepY, pfont, pcolor) {
+	function initialize(pstepX, pstepY, pstepRad, pfont, pcolor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		steps = 0;
 		stepPercent = 0;
 		stepFont = pfont;
 		stepColor = pcolor;
 		stepX = pstepX;
-		stepY = pstepY;		
+		stepY = pstepY;
+		stepRad = pstepRad;
 	}
 	
 	function draw(dc) {
 		steps = ActMon.getInfo().steps;
-		dc.setColor(stepColor, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(stepX, stepY, stepFont, steps.toString(), Gfx.TEXT_JUSTIFY_CENTER);
+		Helper.drawColorCircle(dc, stepX, stepY, stepRad, Ui.loadResource(Rez.Drawables.StepsIcon), steps, stepFont, stepColor);
 	}
 	
 	function drawPercent(dc) {
+		var strStepPercent = "";
 		if (ActMon.getInfo().stepGoal > 0) {
 			stepPercent = ((ActMon.getInfo().steps.toDouble()/ActMon.getInfo().stepGoal.toDouble())*100).toNumber();
-			dc.setColor(stepColor, Gfx.COLOR_TRANSPARENT);
-			dc.drawText(stepX, stepY, stepFont, stepPercent.toString()+"%", Gfx.TEXT_JUSTIFY_CENTER);
+			strStepPercent = stepPercent.toString() + "%";
 		} else {
-			dc.drawText(stepX, stepY, stepFont, "--%", Gfx.TEXT_JUSTIFY_CENTER);
+			strStepPercent = "--%";
 		}
+		Helper.drawColorCircle(dc, stepX, stepY, stepRad, Ui.loadResource(Rez.Drawables.StepsIcon), strStepPercent, stepFont, stepColor);
 	}
-		
 
 }

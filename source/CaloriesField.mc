@@ -6,38 +6,35 @@
 
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class CaloriesField extends Ui.Drawable {
 
 	var cals;
 	var calsX;
 	var calsY;
+	var calsRad;
 	var calsFont;
 	var calsColor;
 	
-	function initialize(pcalsX, pcalsY, pcalsFont, pcalsColor) {
+	function initialize(pcalsX, pcalsY, pcalsRad, pcalsFont, pcalsColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		cals = 0;
 		calsX = pcalsX;
 		calsY = pcalsY;
+		calsRad = pcalsRad;
 		calsFont = pcalsFont;
 		calsColor = pcalsColor;
 	}
 	
 	function draw(dc) {
+		var strCals = "";
 		cals = ActMon.getInfo().calories;
-		dc.setColor(calsColor, Gfx.COLOR_TRANSPARENT);
 		if (cals != null) {
-			dc.drawText(calsX, calsY, calsFont, cals.toString(), Gfx.TEXT_JUSTIFY_CENTER);
+			strCals = cals.toString();
 		} else {
-			dc.drawText(calsX, calsY, calsFont, "---", Gfx.TEXT_JUSTIFY_CENTER);
+			strCals = "--";
 		}
+		Helper.drawColorCircle(dc, calsX, calsY, calsRad, Ui.loadResource(Rez.Drawables.CaloriesIcon), strCals, calsFont, calsColor);
 	}
 }

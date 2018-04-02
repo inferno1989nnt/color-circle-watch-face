@@ -10,27 +10,23 @@
 
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class BatteryField extends Ui.Drawable {
 
 	var batLife;
 	var batX;
 	var batY;
+	var batRad;
 	var batFont;
 	var batColor;
 
-	function initialize(pbatX, pbatY, pbatFont, pbatColor) {
+	function initialize(pbatX, pbatY, pbatRad, pbatFont, pbatColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		batLife = 0;
 		batX = pbatX;
 		batY = pbatY;
+		batRad = pbatRad;
 		batFont = pbatFont;
 		batColor = pbatColor;
 	}
@@ -38,12 +34,12 @@ class BatteryField extends Ui.Drawable {
 	function draw(dc) {
 		batLife = System.getSystemStats().battery;
 		if (batLife > 20) {
-			dc.setColor(batColor, Gfx.COLOR_TRANSPARENT);
+			// Keep color
 		} else if (batLife > 10) {
-			dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+			batColor = Gfx.COLOR_YELLOW;
 		} else {
-			dc.setColor(Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
+			batColor = Gfx.COLOR_RED;
 		}
-		dc.drawText(batX, batY, batFont, batLife.toNumber().toString() +"%", Gfx.TEXT_JUSTIFY_CENTER);
+		Helper.drawColorCircle(dc, batX, batY, batRad, Ui.loadResource(Rez.Drawables.BatteryIcon), batLife.toNumber().toString() + "%", batFont, batColor);
 	}
 }

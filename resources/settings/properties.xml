@@ -1,18 +1,20 @@
 <properties>
     <property id="TimeColor" type="number">0</property>
-    <property id="DateColor" type="number">8</property>
+    <property id="DateColor" type="number">0</property>
     <property id="DateFormat" type="number">0</property>
-    <property id="LogoColor" type="number">8</property>
-    <property id="Smile1Color" type="number">8</property>
-    <property id="Smile2Color" type="number">8</property>
-    <property id="Smile3Color" type="number">8</property>
-    <property id="Circle1Color" type="number">8</property>
-    <property id="Circle2Color" type="number">8</property>
-    <property id="Circle3Color" type="number">8</property>
-    <property id="Circle4Color" type="number">8</property>
+    <property id="Circle1Color" type="number">2</property>
+    <property id="Circle2Color" type="number">6</property>
+    <property id="Circle3Color" type="number">4</property>
+    <property id="Circle4Color" type="number">5</property>
+    <property id="Circle5Color" type="number">0</property>
+    <property id="Circle6Color" type="number">8</property>
+    <property id="Circle7Color" type="number">10</property>
     <property id="Field1" type="number">3</property>
     <property id="Field2" type="number">8</property>
-    <property id="Field3" type="number">5</property>
-    <property id="Field4" type="number">6</property>
-    <property id="Phone" type="number">0</property>
+    <property id="Field3" type="number">13</property>
+    <property id="Field4" type="number">11</property>
+    <property id="Field5" type="number">6</property>
+    <property id="Field6" type="number">2</property>
+    <property id="Field7" type="number">4</property>
+    <property id="Phone" type="number">1</property>
 </properties>

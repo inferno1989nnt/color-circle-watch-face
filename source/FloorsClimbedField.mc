@@ -6,13 +6,7 @@ The floors climbed can be displayed as the number of floors climbed, or as a per
 */
 
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
-using Toybox.Lang as Lang;
-using Toybox.Application as App;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.ActivityMonitor as ActMon;
-using Toybox.Activity as Act;
 
 class FloorsClimbedField extends Ui.Drawable {
 
@@ -21,24 +15,25 @@ class FloorsClimbedField extends Ui.Drawable {
 	var floorPercent;
 	var floorsX;
 	var floorsY;
+	var floorsRad;
 	var floorsColor;
 	var floorsFont;
 	
-	function initialize(pfloorsX, pfloorsY, pfloorsFont, pfloorsColor) {
+	function initialize(pfloorsX, pfloorsY, pfloorsRad, pfloorsFont, pfloorsColor) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		floors = 0;
 		floorGoal = 0;
 		floorPercent = 0;
 		floorsX = pfloorsX;
 		floorsY = pfloorsY;
+		floorsRad = pfloorsRad;
 		floorsColor = pfloorsColor;
 		floorsFont = pfloorsFont;
 	}
 	
 	function draw(dc) {
 		floors = ActMon.getInfo().floorsClimbed;
-		dc.setColor(floorsColor, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(floorsX, floorsY, floorsFont, floors.toString(), Gfx.TEXT_JUSTIFY_CENTER);
+		Helper.drawColorCircle(dc, floorsX, floorsY, floorsRad, Ui.loadResource(Rez.Drawables.FloorsIcon), floors.toString(), floorsFont, floorsColor);
 	}
 	
 	function drawPercent(dc) {
@@ -47,7 +42,6 @@ class FloorsClimbedField extends Ui.Drawable {
 		if (floorGoal > 0) {
 			floorPercent = (floors.toDouble()/floorGoal.toDouble()) * 100;
 		}
-		dc.setColor(floorsColor, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(floorsX, floorsY, floorsFont, floorPercent.toNumber().toString()+"%", Gfx.TEXT_JUSTIFY_CENTER);	
+		Helper.drawColorCircle(dc, floorsX, floorsY, floorsRad, Ui.loadResource(Rez.Drawables.FloorsIcon), floorPercent.toNumber().toString() + "%", floorsFont, floorsColor);
 	}
 }

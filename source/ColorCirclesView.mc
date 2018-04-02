@@ -59,38 +59,37 @@ using Toybox.Background;
 
 class ColorCirclesView extends Ui.WatchFace {
 	//user selected data fields to display
-	var PROP_FIELDS = new [5];
-	var fieldProperties = ["Field1", "Field2", "Field3", "Field4", "Phone"];
-	var icons = new [6];
-	//user selected colors	
-	var PROP_COLORS = new [10];
-	var colorProperties = ["Circle1Color", "Circle2Color","Circle3Color", "Circle4Color", "Smile1Color", "Smile2Color", "Smile3Color", "LogoColor", "TimeColor", "DateColor"];
+	var PROP_FIELDS = new [8];
+	var fieldProperties = ["Field1", "Field2", "Field3", "Field4", "Field5", "Field6", "Field7", "Phone"];
+	var icons = new [9];
+	
+	//user selected colors
+	var PROP_COLORS = new [9];
+	var colorProperties = ["Circle1Color", "Circle2Color", "Circle3Color", "Circle4Color", "Circle5Color", "Circle6Color", "Circle7Color", "TimeColor", "DateColor"];
 	var colorNum = null;
+	
 	//user selected date layout
 	var PROP_DATE_FORMAT = 0;
 	
 	//locations of data fields, icons, time and date
 	var bluetoothLocation = new[2];
-	var circleXLocations = new [4];
-	var circleYLocations = new [4];
-	var dateLocation, timeLocation, sweatLocation, happyLocation, SHLocation = new [2];
-	var smileXLocations, smileYLocations = new [3];
+	var circleXLocations = new [7];
+	var circleYLocations = new [7];
+	var dateLocation, timeLocation = new [2];
+	
 	//size of each data "bubble"
-	var smileRadii = new [3];
-	var circleRadius, SHRadius;
+	var circleRadius = new [7];
 	
 	//fonts	
 	var dateFont = null;
 	var timeFont = null;
 	var sysFont = null;
-	var logoFont = null;
 	
     function initialize() {
     	WatchFace.initialize();
     	//initialize property variables (user selections)
     	//default values are notifications, battery life, calories, step count as a percent, bluetooth indicator present
     	//initialize all colors to blue
-    	PROP_FIELDS = [ 1, 2, 5, 6, 1];
 
     	for (var i = 0; i<PROP_COLORS.size(); i++) {
     		PROP_COLORS[i] = Gfx.COLOR_BLUE;
@@ -107,10 +106,10 @@ class ColorCirclesView extends Ui.WatchFace {
     	
     	PROP_DATE_FORMAT = Application.getApp().getProperty("DateFormat");
     }
-    	
+
     function onLayout(dc) {
 		setLocations(dc);
-		loadIcons(dc);	
+		loadIcons(dc);
     }
 
     function onShow() {	}
@@ -121,102 +120,84 @@ class ColorCirclesView extends Ui.WatchFace {
     	dc.clear();
 		dc.setPenWidth(3);
 		
-    	//draw the smiley faces
-    	for (var j = 0; j<smileXLocations.size(); j++){
-			dc.setColor(PROP_COLORS[j+4], Gfx.COLOR_TRANSPARENT);
-			dc.drawCircle(smileXLocations[j], smileYLocations[j], smileRadii[j]);
-			dc.fillCircle(smileXLocations[j]-.3*smileRadii[j], smileYLocations[j]-.3*smileRadii[j], 2);
-			dc.fillCircle(smileXLocations[j]+.3*smileRadii[j], smileYLocations[j]-.3*smileRadii[j], 2);
-			dc.drawArc(smileXLocations[j], smileYLocations[j], smileRadii[j]/2, Gfx.ARC_CLOCKWISE, 350, 190);
-		}
-		
-		//draw the "sweat happy" logo
-		dc.setColor(PROP_COLORS[7], Gfx.COLOR_TRANSPARENT);
-		dc.drawText(sweatLocation[0], sweatLocation[1], logoFont, "sweat", Gfx.TEXT_JUSTIFY_CENTER);
-		dc.drawText(happyLocation[0], happyLocation[1], logoFont, "happy", Gfx.TEXT_JUSTIFY_CENTER);
-		dc.drawCircle(SHLocation[0], SHLocation[1], SHRadius);
-		
 		//draw the bluetooth icon
-		if (PROP_FIELDS[4] == 1) {
+		if (PROP_FIELDS[7] == 1) {
 			if (System.getDeviceSettings().phoneConnected == true) {
-				dc.drawBitmap(bluetoothLocation[0], bluetoothLocation[1], icons[4]);
+				dc.drawBitmap(bluetoothLocation[0], bluetoothLocation[1], icons[7]);
 			} else {
-				dc.drawBitmap(bluetoothLocation[0], bluetoothLocation[1], icons[5]);
+				dc.drawBitmap(bluetoothLocation[0], bluetoothLocation[1], icons[8]);
 			}
 		}
 		
 		//draw the time
-		var time = new TimeField(timeLocation[0], timeLocation[1], timeFont, PROP_COLORS[8]);
+		var time = new TimeField(timeLocation[0], timeLocation[1], timeFont, PROP_COLORS[7]);
 		time.draw(dc);
 		
 		//draw the date
-		var date = new DateField(dateLocation[0], dateLocation[1], dateFont, PROP_COLORS[9], PROP_DATE_FORMAT);
+		var date = new DateField(dateLocation[0], dateLocation[1], dateFont, PROP_COLORS[8], PROP_DATE_FORMAT);
 		date.draw(dc);
 		
 		//draw data fields, with no default
 		for (var i = 0; i<circleXLocations.size(); i++) {
-			dc.setColor(PROP_COLORS[i], Gfx.COLOR_TRANSPARENT);
-			dc.drawCircle(circleXLocations[i], circleYLocations[i], circleRadius);
-			dc.drawBitmap(circleXLocations[i]-7, circleYLocations[i]-24, icons[i]);
 			switch (PROP_FIELDS[i]) {
 				case 0:
-					var alarm = new AlarmField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var alarm = new AlarmField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					alarm.draw(dc);
 					break;
 				case 1:
-					var messages = new MessageField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var messages = new MessageField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					messages.draw(dc);
 					break;
 				case 2:
-					var battery = new BatteryField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var battery = new BatteryField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					battery.draw(dc);
 					break;
 				case 3:
-					var heartRate = new HeartRateField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var heartRate = new HeartRateField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					heartRate.draw(dc);
 					break;
 				case 4:
-					var steps = new StepsField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var steps = new StepsField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					steps.draw(dc);
 					break;
 				case 5:
-					var stepsPer = new StepsField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var stepsPer = new StepsField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					stepsPer.drawPercent(dc);
 					break;
 				case 6:
-					var calories = new CaloriesField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var calories = new CaloriesField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					calories.draw(dc);
 					break;
 				case 7:
-					var elevation = new AltitudeField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var elevation = new AltitudeField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					elevation.draw(dc);
 					break;
 				case 8:
-					var distance = new DistanceField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var distance = new DistanceField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					distance.draw(dc);
 					break;
 				case 9:
-					var activeMinDay = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i], 0, 0);
+					var activeMinDay = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i], 0, 0);
 					activeMinDay.draw(dc);
 					break;
 				case 10:
-					var activeMinWeek = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i], 0, 1);
+					var activeMinWeek = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i], 0, 1);
 					activeMinWeek.draw(dc);
 					break;
 				case 11:
-					var activeMinDayPer = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i], 1, 0);
+					var activeMinDayPer = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i], 1, 0);
 					activeMinDayPer.draw(dc);
 					break;
 				case 12:
-					var activeMinWeekPer = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i], 1, 1);
+					var activeMinWeekPer = new ActiveMinutesField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i], 1, 1);
 					activeMinWeekPer.draw(dc);
 					break;
 				case 13:
-					var floors = new FloorsClimbedField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var floors = new FloorsClimbedField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					floors.draw(dc);
 					break;
 				case 14:
-					var floorsPercent = new FloorsClimbedField(circleXLocations[i], circleYLocations[i], sysFont, PROP_COLORS[i]);
+					var floorsPercent = new FloorsClimbedField(circleXLocations[i], circleYLocations[i], circleRadius[i], sysFont, PROP_COLORS[i]);
 					floorsPercent.drawPercent(dc);
 					break;					
 				default:
@@ -337,77 +318,63 @@ class ColorCirclesView extends Ui.WatchFace {
 		}
 	}
 	
-	/**This function sets locations and fonts based upon the watch shape and size. */
-	
+	/** This function sets locations and fonts based upon the watch shape and size. */
 	function setLocations(dc) {
-    	circleRadius = 30;
-    	SHRadius = 25;
     	timeFont = Ui.loadResource(Rez.Fonts.TB40);
     	dateFont = Ui.loadResource(Rez.Fonts.TB20);
 		sysFont = Ui.loadResource(Rez.Fonts.TB20);
-		logoFont = Ui.loadResource(Rez.Fonts.TB15);
 		
 		if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_ROUND) {
-	    	if (System.getDeviceSettings().screenWidth < 220) {  //SmallRound
-	    		circleXLocations = [ 35,  80,  110, 170];//[.1605,.36697,.504587,.77981 ]
-    			circleYLocations = [132, 176,  30,  150];//[.6055, .807339,.137614,.68807]
-    			timeLocation = [dc.getWidth()/2, 65];//.298165
-    			dateLocation = [dc.getWidth()/2, 105];//.4375
-    			SHLocation = [165, 48];
-    			smileXLocations = [58, 119, 130];
-    			smileYLocations = [40, 145, 185];
-    			smileRadii = [20, 15, 20];
-    			bluetoothLocation = [20, 50];
-	    	} else {						//largeRound
-	    		circleXLocations = [ 42,  90,  115, 193];//[.175, .375, .479166, .80416]
-    			circleYLocations = [155, 200,  35,  165];//[.64, .8333, .14583, .6875]
-    			circleRadius = 31;
-    			timeLocation = [dc.getWidth()/2, 73];//.304
-    			dateLocation = [dc.getWidth()/2, 127];//.54166
-    			SHLocation = [179, 53];
-    			SHRadius = 25;
-    			smileXLocations = [58, 130, 149];
-    			smileYLocations = [50, 165, 205];
-    			smileRadii = [22, 15, 25];
+			//SmallRound
+	    	if (System.getDeviceSettings().screenWidth < 220) {
+	    		circleXLocations = [ 58, 112, 165, 37, 80, 130, 170 ];
+    			circleYLocations = [ 40, 30, 48, 134, 176, 185, 150 ];
+    			circleRadius = [ 20, 30, 25, 25, 30, 20, 30 ];
+    			timeLocation = [ dc.getWidth() / 2, 70 ];
+    			dateLocation = [ dc.getWidth() / 2, 110 ];
+    			bluetoothLocation = [ 20, 50 ];
+	    	}
+	    	//largeRound 
+	    	else {
+	    		circleXLocations = [ 58, 117, 179, 44, 90, 149, 193 ];
+    			circleYLocations = [ 50, 35, 53, 157, 200, 205, 165 ];
+    			circleRadius = [ 22, 30, 25, 25, 30, 25, 30 ];
+    			timeLocation = [ dc.getWidth() / 2, 78 ];
+    			dateLocation = [ dc.getWidth() / 2, 132 ];
     			timeFont = Ui.loadResource(Rez.Fonts.TB60);
-    			bluetoothLocation = [15, 60];
+    			bluetoothLocation = [ 15, 60 ];
     		}
 		} else if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_RECTANGLE) {
-    		if (System.getDeviceSettings().screenWidth > System.getDeviceSettings().screenHeight) {  //longRectangle
-    			circleXLocations = [32,  35,  94, 170];
-    			circleYLocations = [40, 113,  31,  117];
-    			timeLocation = [dc.getWidth()/2, 65];
-    			dateLocation = [dc.getWidth()/2, 90];
-    			SHLocation = [175, 57];
-    			smileXLocations = [85, 121, 142];
-    			smileYLocations = [130, 125, 27];
-    			smileRadii = [17, 14, 15];
+			//longRectangle
+    		if (System.getDeviceSettings().screenWidth > System.getDeviceSettings().screenHeight) {
+    			circleXLocations = [ 85, 96, 175, 34, 35, 142, 170 ];
+    			circleYLocations = [ 130, 31, 57, 42, 113, 27, 117 ];
+    			circleRadius = [ 17, 30, 25, 25, 30, 15, 30 ];
+    			timeLocation = [ dc.getWidth() / 2, 70 ];
+    			dateLocation = [ dc.getWidth() / 2, 95 ];
     			timeFont = Ui.loadResource(Rez.Fonts.TB30);
-    			bluetoothLocation = [125, 48];
-     		} else {										//tallRectangle
-     			circleXLocations = [ 30, 34, 113, 117];
-    			circleYLocations = [174, 90, 95, 170];
-    			dateLocation = [dc.getWidth()/2, 40];
-    			timeLocation = [dc.getWidth()/2, 5];
-    			SHLocation = [72, 135];
-    			smileXLocations = [15, 74, 133];
-    			smileYLocations = [132, 190, 50];
-    			smileRadii = [12, 14, 13];
-    			bluetoothLocation = [65, 65];
+    			bluetoothLocation = [ 125, 48 ];
+     		}
+     		//tallRectangle
+     		else {
+     			circleXLocations = [ 15, 115, 72, 32, 34, 133, 117 ];
+    			circleYLocations = [ 132, 95, 135, 176, 90, 50, 170 ];
+    			circleRadius = [ 30, 30, 25, 25, 30, 13, 12 ];
+    			dateLocation =  [ dc.getWidth() / 2, 45 ];
+    			timeLocation = [ dc.getWidth() / 2, 10 ];
+    			bluetoothLocation = [ 65, 65 ];
     		}
-    	} else {					//semiRound
-	   		    circleXLocations = [ 45,  105,  110, 165];
-    			circleYLocations = [132, 150,  30,  141];
-    			timeLocation = [dc.getWidth()/2, 63];
-    			dateLocation = [dc.getWidth()/2+1, 100];
-    			SHLocation = [165, 48];
-    			smileXLocations = [21, 53, 192];
-    			smileYLocations = [88, 37, 92];
-    			smileRadii = [17, 25, 18];
-    			bluetoothLocation = [12, 49];
+    	} 
+    	//semiRound
+    	else {
+   		    circleXLocations = [ 21, 112, 165, 47, 105, 192, 165 ];
+			circleYLocations = [ 88, 30, 48, 134, 150, 92, 141 ];
+			circleRadius = [ 17, 30, 25, 25, 30, 18, 30 ];
+			timeLocation = [ dc.getWidth() / 2, 71 ];
+			dateLocation = [ dc.getWidth() / 2 + 1, 105 ];
+			bluetoothLocation = [ 12, 49 ];
     	}
-    	sweatLocation = [SHLocation[0], SHLocation[1]-20];
-    	happyLocation = [SHLocation[0], SHLocation[1]];
+
     }
      
 }
