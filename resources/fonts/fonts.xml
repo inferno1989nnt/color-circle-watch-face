@@ -4,4 +4,7 @@
 	<font id="TB30" filename="timeburner30.fnt" />
 	<font id="TB40" filename="timeburner40.fnt" />
 	<font id="TB60" filename="timeburner60.fnt" />
+	<font id="CB15" filename="cambria15.fnt" />
+	<font id="CB20" filename="cambria20.fnt" />
+	<font id="CB80" filename="cambria80.fnt" />
 </fonts>

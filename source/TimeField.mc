@@ -18,28 +18,38 @@ using Toybox.Activity as Act;
 class TimeField extends Ui.Drawable {
 
 	var time = null;
-	var timeString = null;
-	
+
 	var timeFont = null;
-	var timeColor = null;
+	var amPmFont = null;
+	var hourColor = null;
+	var minColor = null;
+	var colonColor = null;
+	var amPmColor = null;
 	var timeX = null;
 	var timeY = null;
 	
-	function initialize(ptimeX, ptimeY, pfont, pcolor) {
+	function initialize(ptimeX, ptimeY, pTimeFont, pAmPmFont, phourColor, pminColor, pcolonColor, pcolorAmPm) {
 		Ui.Drawable.initialize({:locX => 0, :locY => 0});
 		time = null;
-		timeString = null;
-		timeFont = pfont;
-		timeColor = pcolor;
+		timeFont = pTimeFont;
+		amPmFont = pAmPmFont;
+		hourColor = phourColor;
+		minColor = pminColor;
+		colonColor = pcolonColor;
+		amPmColor = pcolorAmPm;
 		timeX = ptimeX;
 		timeY = ptimeY;
 	}
 	
 	function draw(dc) {
+		var str = "";
+		var is24Hour = System.getDeviceSettings().is24Hour;
 		time = Calendar.info(Time.now(), Time.FORMAT_SHORT);
-		if (!System.getDeviceSettings().is24Hour) {
+		
+		// Draw hour
+		if (!is24Hour) {
 			if (time.hour < 12) {
-				timeString = Lang.format("$1$:$2$ $3$", [time.hour, time.min.format("%02d"), "am"]);
+				str = Lang.format("$1$:$2$ $3$", [time.hour, time.min.format("%02d"), "am"]);
 			} else if (time.hour == 12) {
 				timeString = Lang.format("$1$:$2$ $3$", [time.hour, time.min.format("%02d"), "pm"]);
 			} else {
@@ -48,8 +58,25 @@ class TimeField extends Ui.Drawable {
 		} else {
 			timeString = Lang.format("$1$:$2$", [time.hour, time.min.format("%02d")]);
 		}
-		
+
 		dc.setColor(timeColor, Gfx.COLOR_TRANSPARENT);
 		dc.drawText(timeX, timeY, timeFont, timeString, Gfx.TEXT_JUSTIFY_CENTER);
+		
+		// Draw colon
+		
+		
+		// Draw minute
+		
+		// Draw AM/PM if any
+		if (is24Hour) {
+			if (time.hour < 12) {
+				str = "am";
+			} else {
+				str = "pm";
+			}
+			
+			dc.setColor(amPmColor, Gfx.COLOR_TRANSPARENT);
+			dc.drawText(timeX, timeY, amPmFont, str, Gfx.TEXT_JUSTIFY_CENTER);
+		}
 	}
 }

@@ -3,7 +3,7 @@ using Toybox.Graphics as Gfx;
 module Helper {
 
 	var MARGIN = 1;
-	var PEN_WIDTH = 3;
+	var PEN_WIDTH = 2;
 	
 	function drawColorCircle(dc, circleXloc, circleYloc, circleRad, drawable, data, font, color) {
 	

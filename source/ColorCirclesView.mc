@@ -320,12 +320,14 @@ class ColorCirclesView extends Ui.WatchFace {
 	
 	/** This function sets locations and fonts based upon the watch shape and size. */
 	function setLocations(dc) {
+		// Default font
     	timeFont = Ui.loadResource(Rez.Fonts.TB40);
     	dateFont = Ui.loadResource(Rez.Fonts.TB20);
 		sysFont = Ui.loadResource(Rez.Fonts.TB20);
 		
 		if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_ROUND) {
-			//SmallRound
+			// SmallRound
+			// Fenix 5S, Fenix Chronos
 	    	if (System.getDeviceSettings().screenWidth < 220) {
 	    		circleXLocations = [ 58, 112, 165, 37, 80, 130, 170 ];
     			circleYLocations = [ 40, 30, 48, 134, 176, 185, 150 ];
@@ -334,28 +336,34 @@ class ColorCirclesView extends Ui.WatchFace {
     			dateLocation = [ dc.getWidth() / 2, 110 ];
     			bluetoothLocation = [ 20, 50 ];
 	    	}
-	    	//largeRound 
+	    	// LargeRound 
+	    	// Approach S60, D2 Charlie, Descent Mk1, Fenix5, Fenix 5X,
+	    	// Forerunner 645, Forerunner 645 music, Forerunner 935, Vivoactive 3
 	    	else {
 	    		circleXLocations = [ 58, 117, 179, 44, 90, 149, 193 ];
     			circleYLocations = [ 50, 35, 53, 157, 200, 205, 165 ];
     			circleRadius = [ 22, 30, 25, 25, 30, 25, 30 ];
-    			timeLocation = [ dc.getWidth() / 2, 78 ];
-    			dateLocation = [ dc.getWidth() / 2, 132 ];
-    			timeFont = Ui.loadResource(Rez.Fonts.TB60);
+    			timeLocation = [ dc.getWidth() / 2, 64 ];
+    			dateLocation = [ dc.getWidth() / 2, 140 ];
     			bluetoothLocation = [ 15, 60 ];
+    			timeFont = Ui.loadResource(Rez.Fonts.CB80);
+    			dateFont = Ui.loadResource(Rez.Fonts.CB20);
+    			sysFont = Ui.loadResource(Rez.Fonts.CB15);
     		}
 		} else if (System.getDeviceSettings().screenShape == System.SCREEN_SHAPE_RECTANGLE) {
-			//longRectangle
+			// LongRectangle
+			// There is no CIQ 2.x devices
     		if (System.getDeviceSettings().screenWidth > System.getDeviceSettings().screenHeight) {
     			circleXLocations = [ 85, 96, 175, 34, 35, 142, 170 ];
     			circleYLocations = [ 130, 31, 57, 42, 113, 27, 117 ];
     			circleRadius = [ 17, 30, 25, 25, 30, 15, 30 ];
     			timeLocation = [ dc.getWidth() / 2, 70 ];
-    			dateLocation = [ dc.getWidth() / 2, 95 ];
-    			timeFont = Ui.loadResource(Rez.Fonts.TB30);
+				dateLocation = [ dc.getWidth() / 2, 95 ];
     			bluetoothLocation = [ 125, 48 ];
+    			timeFont = Ui.loadResource(Rez.Fonts.TB30);
      		}
-     		//tallRectangle
+     		// TallRectangle
+     		// Vivoactive HR
      		else {
      			circleXLocations = [ 15, 115, 72, 32, 34, 133, 117 ];
     			circleYLocations = [ 132, 95, 135, 176, 90, 50, 170 ];
@@ -365,7 +373,8 @@ class ColorCirclesView extends Ui.WatchFace {
     			bluetoothLocation = [ 65, 65 ];
     		}
     	} 
-    	//semiRound
+    	// SemiRound
+    	// Forerunner 735XT
     	else {
    		    circleXLocations = [ 21, 112, 165, 47, 105, 192, 165 ];
 			circleYLocations = [ 88, 30, 48, 134, 150, 92, 141 ];
